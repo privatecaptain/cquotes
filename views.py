@@ -5,7 +5,7 @@ import os
 from werkzeug import secure_filename
 import json
 import random
-
+from config import *
 app = Flask(__name__, instance_relative_config=True,static_url_path="/static")
 db = SQLAlchemy(app)
 
@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 
 
 app.config['SECRET_KEY'] = '$&^&B&*^*MN&*CDMN&*()B^&*()P^&_N*NM(P)*&D()&*^'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:badman1108@localhost/cquotes'
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.debug = True
 
 class Quote(db.Model):
@@ -49,4 +49,4 @@ def getRandom():
 
 
 if __name__ == '__main__':
-	app.run()
+	app.run('0.0.0.0')
