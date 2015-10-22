@@ -10,13 +10,28 @@ def make_tree(url):
     page = requests.get(url,headers=headers)
     return html.fromstring(page.text)
 
+def cleanUp(el):
+	el = el.strip()
+	state = False
+	for i in el:
+		if i.isalpha():
+			state = True
+	if state:
+		return el
+	else:
+		return False
 
 urls = []
 
 def getQuotes(url):
+	print url
 	tree = make_tree(url)
-	quotes = tree.xpath('//*[@title="view quote"]/text()')
-	authors = tree.xpath('//*[@title="view author"]/text()')
+	q = tree.xpath('//*[@class="quoteText"]/text()')
+	quotes = []
+	for i in q:
+		if cleanUp(i):
+			quotes.append(cleanUp(i))
+	authors = tree.xpath('//*[@class="quoteText"]/a/text()')
 	d  = dict(zip(quotes,authors))
 	return d
 
@@ -30,8 +45,7 @@ def generateURLs(url,n):
 		if i == 1:
 			l.append(url)
 		else:
-			l.append(url+str(n))
-	print l
+			l.append(url+ '?page=' +str(i))
 	return l
 
 urls = generateURLs(main_url,pages)
