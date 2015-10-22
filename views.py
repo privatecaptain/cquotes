@@ -45,7 +45,7 @@ def reply():
 	return json.dumps(q)
 
 def getRandom():
-	return random.randint(1,1000)
+	return random.randint(4000,6999)
 
 
 if __name__ == '__main__':
