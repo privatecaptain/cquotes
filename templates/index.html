@@ -1,0 +1,13 @@
+<html>
+<head>
+	<title>Chrome Quotes -- Home</title>
+
+</head>
+
+<body>
+
+{% for quote in quotes %}
+<li>{{quote.content}} --- {{quote.author}}</li>
+{% endfor %}
+
+</body>
