@@ -1,7 +1,6 @@
 from flask import Flask , make_response, render_template, jsonify, send_from_directory,request,redirect
 from flask.ext.login import login_required , current_user
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.bcrypt import Bcrypt
 import os
 from werkzeug import secure_filename
 import json
