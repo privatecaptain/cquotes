@@ -1,8 +1,9 @@
 import requests
 from lxml import html 
 import json
+from views import db,Quote
 
-f = open('data.json','w')
+
 
 
 def make_tree(url):
@@ -21,22 +22,20 @@ def cleanUp(el):
 	else:
 		return False
 
-urls = []
 
 def getQuotes(url):
 	print url
 	tree = make_tree(url)
-	q = tree.xpath('//*[@class="quoteText"]/text()')
+	q = tree.xpath('//*[@class="quoteText"]')
 	quotes = []
-	for i in q:
-		if cleanUp(i):
-			quotes.append(cleanUp(i))
+	quotes = [i.text.strip() for i in q]
 	authors = tree.xpath('//*[@class="quoteText"]/a/text()')
 	d  = dict(zip(quotes,authors))
 	return d
 
-main_url = raw_input('Enter URL : ')
-pages = int(raw_input('Enter the no. of pages : '))
+
+
+
 
 
 def generateURLs(url,n):
@@ -48,14 +47,18 @@ def generateURLs(url,n):
 			l.append(url+ '?page=' +str(i))
 	return l
 
-urls = generateURLs(main_url,pages)
+def do():
+	main_url = raw_input('Enter URL : ')
+	pages = int(raw_input('Enter the no. of pages : '))
+	f = open('data.json','w')
+	urls = []
+	urls = generateURLs(main_url,pages)
 
-data = []
+	data = []
+	for i in urls:
+		data.append(getQuotes(i))
 
-for i in urls:
-	data.append(getQuotes(i))
+	f.write(json.dumps(data))
 
-f.write(json.dumps(data))
-
-f.close()
+	f.close()
 	
