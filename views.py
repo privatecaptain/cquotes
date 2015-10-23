@@ -7,6 +7,8 @@ from werkzeug import secure_filename
 import json
 import random
 from config import *
+
+
 app = Flask(__name__, instance_relative_config=True,static_url_path="/static")
 db = SQLAlchemy(app)
 
@@ -28,22 +30,23 @@ class Quote(db.Model):
 	def __init__(self):
 		pass
 
-	def __repr__(self):
-		return 'Quote -> {0}'.format(self.content)
+
 
 
 @app.route('/')
 def index():
-	quotes = Quote.query.all()
+	quotes = Quote.query.all()[:20]
 	return render_template('index.html',quotes=quotes)
+
 
 @app.route('/random')
 def reply():
+	print request.remote_addr
 	while True:
 		quote = Quote.query.order_by(func.rand()).first()
 		if len(quote.content) < 150:
 			break
-	
+
 	q = {}
 	q['content'] = quote.content
 	q['author'] = quote.author
