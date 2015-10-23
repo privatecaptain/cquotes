@@ -1,6 +1,7 @@
 from flask import Flask , make_response, render_template, jsonify, send_from_directory,request,redirect
 from flask.ext.login import login_required , current_user
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.sql.expression import func, select
 import os
 from werkzeug import secure_filename
 import json
@@ -38,7 +39,7 @@ def index():
 
 @app.route('/random')
 def reply():
-	quote = Quote.query.get(getRandom())
+	quote = Quote.query.order_by(func.rand()).first()
 	q = {}
 	q['content'] = quote.content
 	q['author'] = quote.author
