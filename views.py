@@ -39,7 +39,11 @@ def index():
 
 @app.route('/random')
 def reply():
-	quote = Quote.query.order_by(func.rand()).first()
+	while True:
+		quote = Quote.query.order_by(func.rand()).first()
+		if len(quote.content) < 150:
+			break
+	
 	q = {}
 	q['content'] = quote.content
 	q['author'] = quote.author
