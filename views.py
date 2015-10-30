@@ -17,6 +17,7 @@ db = SQLAlchemy(app)
 
 app.config['SECRET_KEY'] = '$&^&B&*^*MN&*CDMN&*()B^&*()P^&_N*NM(P)*&D()&*^'
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.debug = True
 
 class Quote(db.Model):
@@ -52,8 +53,16 @@ def reply():
 	q['author'] = quote.author
 	return json.dumps(q)
 
-def getRandom():
-	return random.randint(4000,6999)
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file:
+            filename = secure_filename(file.filename)
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filename)
+            return render_template('upload.html',alert='File Uploaded Succesfully!')
+    return render_template('upload.html')
 
 
 if __name__ == '__main__':
